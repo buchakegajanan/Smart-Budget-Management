@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gullakh – Budget Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard.css">
+<style>
+.budget-layout{display:grid;grid-template-columns:340px 1fr;gap:16px}
+.income-card{background:linear-gradient(135deg,rgba(201,123,54,.12),rgba(244,185,66,.06));border:1px solid rgba(244,185,66,.25);border-radius:var(--radius);padding:24px;margin-bottom:16px}
+.income-card h3{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px}
+.income-display{font-size:2rem;font-weight:800;color:var(--gold);margin-bottom:4px}
+.income-sub{font-size:.78rem;color:var(--text-muted);margin-bottom:16px}
+.income-input-row{display:flex;gap:8px}
+.income-input-row input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--radius-sm);font-family:var(--font);font-size:.9rem;outline:none;transition:var(--transition)}
+.income-input-row input:focus{border-color:var(--gold)}
+.budget-cats{display:flex;flex-direction:column;gap:10px}
+.budget-cat-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;transition:var(--transition)}
+.budget-cat-item:hover{border-color:var(--border-hover)}
+.budget-cat-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.budget-cat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.budget-cat-name{font-size:.85rem;font-weight:600;color:var(--text);flex:1}
+.budget-cat-pct{font-size:.78rem;font-weight:700;color:var(--text-muted)}
+.budget-cat-bar{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.budget-cat-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(0.16,1,0.3,1)}
+.budget-cat-amounts{display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-muted)}
+.budget-cat-amounts span:last-child{color:var(--text);font-weight:600}
+/* Right panel */
+.budget-right{display:flex;flex-direction:column;gap:16px}
+.ring-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ring-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center;transition:var(--transition)}
+.ring-card:hover{border-color:var(--border-hover);transform:translateY(-2px)}
+.ring-svg-wrap{position:relative;width:70px;height:70px;margin:0 auto 10px}
+.ring-svg-wrap svg{transform:rotate(-90deg)}
+.ring-center-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:var(--text)}
+.ring-card-name{font-size:.75rem;font-weight:600;color:var(--text-muted);margin-bottom:2px}
+.ring-card-amount{font-size:.85rem;font-weight:700;color:var(--text)}
+.ai-budget-card{background:linear-gradient(135deg,rgba(201,123,54,.08),rgba(244,185,66,.04));border:1px solid rgba(244,185,66,.2);border-radius:var(--radius);padding:20px}
+.ai-budget-card h4{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ai-budget-tip{display:flex;gap:10px;padding:10px;background:rgba(255,255,255,.03);border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border)}
+.ai-budget-tip:last-child{margin-bottom:0}
+.ai-budget-tip p{font-size:.78rem;color:var(--text-muted);line-height:1.5}
+.ai-budget-tip p strong{color:var(--gold)}
+.budget-summary-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.budget-summary-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.budget-summary-row:last-child{border-bottom:none;padding-top:14px}
+.budget-summary-label{font-size:.82rem;color:var(--text-muted)}
+.budget-summary-val{font-size:.9rem;font-weight:700;color:var(--text)}
+@media(max-width:1024px){.budget-layout{grid-template-columns:1fr}.ring-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.ring-grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="amb amb-gold"></div><div class="amb amb-clay"></div><div class="grain"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo"><span class="logo-dot">🪙</span><span class="logo-text">Gullakh</span></div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span><span class="nav-label">Dashboard</span></a>
+    <a href="transactions.html" class="nav-item"><span class="nav-icon">↕</span><span class="nav-label">Transactions</span></a>
+    <a href="analysis.html" class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Analysis</span></a>
+    <a href="goals.html" class="nav-item"><span class="nav-icon">◎</span><span class="nav-label">Goals</span></a>
+    <a href="insights.html" class="nav-item"><span class="nav-icon">✦</span><span class="nav-label">Insights</span></a>
+    <a href="ai-assistant.html" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">AI Assistant</span></a>
+    <a href="budget-planner.html" class="nav-item active"><span class="nav-icon">▦</span><span class="nav-label">Budget Planner</span></a>
+    <a href="categories.html" class="nav-item"><span class="nav-icon">⊛</span><span class="nav-label">Expense Categories</span></a>
+    <a href="notifications.html" class="nav-item"><span class="nav-icon">◐</span><span class="nav-label">Notifications</span><span class="nav-badge">3</span></a>
+    <a href="settings.html" class="nav-item"><span class="nav-icon">⚙</span><span class="nav-label">Settings</span></a>
+  </nav>
+  <div class="sidebar-footer"><div class="user-mini"><div class="user-avatar-sm">A</div><div class="user-info-sm"><span class="user-name-sm">Arjun Sharma</span><span class="user-role-sm">Student</span></div></div></div>
+</aside>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="main-wrapper">
+  <header class="topbar">
+    <div class="topbar-left"><button class="hamburger" id="hamburger">&#9776;</button><div class="topbar-greeting"><span class="greeting-text">Good Morning, <strong>Arjun</strong> 👋</span><span class="greeting-quote">Track Smart. Save Smarter.</span></div></div>
+    <div class="topbar-right"><div class="search-bar"><span class="search-icon">🔍</span><input type="text" placeholder="Search..."></div><a href="notifications.html" class="icon-btn notif-btn"><span>🔔</span><span class="notif-dot"></span></a><div class="user-avatar">A</div></div>
+  </header>
+  <main class="page-content">
+    <div class="page-header"><h2 class="page-title">Budget Planner</h2><span class="page-subtitle">Plan your monthly budget intelligently</span></div>
+    <div class="budget-layout">
+      <!-- Left -->
+      <div>
+        <div class="income-card animate-in">
+          <h3>💰 Monthly Income</h3>
+          <div class="income-display" id="income-display">₹24,500</div>
+          <div class="income-sub">Available for budgeting this month</div>
+          <div class="income-input-row">
+            <input type="number" id="income-input" placeholder="Enter income..." value="24500">
+            <button class="btn-primary" onclick="updateIncome()">Update</button>
+          </div>
+        </div>
+        <div class="budget-cats animate-in" style="animation-delay:.1s">
+          <div class="budget-cat-item">
+            <div class="budget-cat-top"><div class="budget-cat-icon" style="background:rgba(239,68,68,.15)">🍔</div><span class="budget-cat-name">Food & Dining</span><span class="budget-cat-pct">20%</span></div>
+            <div class="budget-cat-bar"><div class="budget-cat-fill" style="width:107%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div>
+            <div class="budget-cat-amounts"><span>Budget: ₹3,500</span><span>Spent: ₹3,760 ⚠️</span></div>
+          </div>
+          <div class="budget-cat-item">
+            <div class="budget-cat-top"><div class="budget-cat-icon" style="background:rgba(244,185,66,.15)">🛒</div><span class="budget-cat-name">Shopping</span><span class="budget-cat-pct">16%</span></div>
+            <div class="budget-cat-bar"><div class="budget-cat-fill" style="width:133%;background:linear-gradient(90deg,#C97B36,#F4B942)"></div></div>
+            <div class="budget-cat-amounts"><span>Budget: ₹3,000</span><span>Spent: ₹3,999 ⚠️</span></div>
+          </div>
+          <div class="budget-cat-item">
+            <div class="budget-cat-top"><div class="budget-cat-icon" style="background:rgba(52,211,153,.15)">🚗</div><span class="budget-cat-name">Transport</span><span class="budget-cat-pct">8%</span></div>
+            <div class="budget-cat-bar"><div class="budget-cat-fill" style="width:98%;background:linear-gradient(90deg,#059669,#34d399)"></div></div>
+            <div class="budget-cat-amounts"><span>Budget: ₹1,500</span><span>Spent: ₹1,475 ✅</span></div>
+          </div>
+          <div class="budget-cat-item">
+            <div class="budget-cat-top"><div class="budget-cat-icon" style="background:rgba(167,139,250,.15)">🎬</div><span class="budget-cat-name">Entertainment</span><span class="budget-cat-pct">6%</span></div>
+            <div class="budget-cat-bar"><div class="budget-cat-fill" style="width:118%;background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
+            <div class="budget-cat-amounts"><span>Budget: ₹1,200</span><span>Spent: ₹1,417 ⚠️</span></div>
+          </div>
+          <div class="budget-cat-item">
+            <div class="budget-cat-top"><div class="budget-cat-icon" style="background:rgba(56,189,248,.15)">📚</div><span class="budget-cat-name">Education</span><span class="budget-cat-pct">5%</span></div>
+            <div class="budget-cat-bar"><div class="budget-cat-fill" style="width:99%;background:linear-gradient(90deg,#0ea5e9,#38bdf8)"></div></div>
+            <div class="budget-cat-amounts"><span>Budget: ₹1,000</span><span>Spent: ₹999 ✅</span></div>
+          </div>
+          <div class="budget-cat-item">
+            <div class="budget-cat-top"><div class="budget-cat-icon" style="background:rgba(52,211,153,.15)">💰</div><span class="budget-cat-name">Savings</span><span class="budget-cat-pct">24%</span></div>
+            <div class="budget-cat-bar"><div class="budget-cat-fill" style="width:117%;background:linear-gradient(90deg,#059669,#34d399)"></div></div>
+            <div class="budget-cat-amounts"><span>Target: ₹5,000</span><span>Saved: ₹5,860 ✅</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Right -->
+      <div class="budget-right">
+        <!-- Ring Grid -->
+        <div class="card animate-in" style="animation-delay:.2s">
+          <div class="card-header"><span class="card-title">◎ Budget Allocation</span><span class="badge-pill badge-clay">December</span></div>
+          <div class="ring-grid">
+            <div class="ring-card">
+              <div class="ring-svg-wrap"><svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/><circle cx="35" cy="35" r="28" fill="none" stroke="#ef4444" stroke-width="6" stroke-dasharray="107 69" stroke-linecap="round"/></svg><div class="ring-center-text">107%</div></div>
+              <div class="ring-card-name">Food</div><div class="ring-card-amount" style="color:#f87171">₹3,760</div>
+            </div>
+            <div class="ring-card">
+              <div class="ring-svg-wrap"><svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/><circle cx="35" cy="35" r="28" fill="none" stroke="#F4B942" stroke-width="6" stroke-dasharray="133 43" stroke-linecap="round"/></svg><div class="ring-center-text">133%</div></div>
+              <div class="ring-card-name">Shopping</div><div class="ring-card-amount" style="color:#F4B942">₹3,999</div>
+            </div>
+            <div class="ring-card">
+              <div class="ring-svg-wrap"><svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/><circle cx="35" cy="35" r="28" fill="none" stroke="#34d399" stroke-width="6" stroke-dasharray="98 78" stroke-linecap="round"/></svg><div class="ring-center-text">98%</div></div>
+              <div class="ring-card-name">Transport</div><div class="ring-card-amount" style="color:#34d399">₹1,475</div>
+            </div>
+            <div class="ring-card">
+              <div class="ring-svg-wrap"><svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/><circle cx="35" cy="35" r="28" fill="none" stroke="#a78bfa" stroke-width="6" stroke-dasharray="118 58" stroke-linecap="round"/></svg><div class="ring-center-text">118%</div></div>
+              <div class="ring-card-name">Entertainment</div><div class="ring-card-amount" style="color:#a78bfa">₹1,417</div>
+            </div>
+            <div class="ring-card">
+              <div class="ring-svg-wrap"><svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/><circle cx="35" cy="35" r="28" fill="none" stroke="#38bdf8" stroke-width="6" stroke-dasharray="99 77" stroke-linecap="round"/></svg><div class="ring-center-text">99%</div></div>
+              <div class="ring-card-name">Education</div><div class="ring-card-amount" style="color:#38bdf8">₹999</div>
+            </div>
+            <div class="ring-card">
+              <div class="ring-svg-wrap"><svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/><circle cx="35" cy="35" r="28" fill="none" stroke="#34d399" stroke-width="6" stroke-dasharray="117 59" stroke-linecap="round"/></svg><div class="ring-center-text">117%</div></div>
+              <div class="ring-card-name">Savings</div><div class="ring-card-amount" style="color:#34d399">₹5,860</div>
+            </div>
+          </div>
+        </div>
+        <!-- Summary -->
+        <div class="budget-summary-card animate-in" style="animation-delay:.3s">
+          <div class="card-header"><span class="card-title">📋 Monthly Summary</span></div>
+          <div class="budget-summary-row"><span class="budget-summary-label">Total Income</span><span class="budget-summary-val" style="color:#34d399">₹24,500</span></div>
+          <div class="budget-summary-row"><span class="budget-summary-label">Total Budgeted</span><span class="budget-summary-val">₹15,200</span></div>
+          <div class="budget-summary-row"><span class="budget-summary-label">Total Spent</span><span class="budget-summary-val" style="color:#f87171">₹18,640</span></div>
+          <div class="budget-summary-row"><span class="budget-summary-label">Over Budget</span><span class="budget-summary-val" style="color:#f87171">₹3,440</span></div>
+          <div class="budget-summary-row"><span class="budget-summary-label" style="font-weight:700;color:var(--text)">Net Savings</span><span class="budget-summary-val" style="color:#34d399;font-size:1.1rem">₹5,860</span></div>
+        </div>
+        <!-- AI Tips -->
+        <div class="ai-budget-card animate-in" style="animation-delay:.4s">
+          <h4>🤖 AI Budget Recommendations</h4>
+          <div class="ai-budget-tip"><span>💡</span><p>Reduce <strong>Food budget</strong> overspend by ₹260 — try meal prepping on Sundays.</p></div>
+          <div class="ai-budget-tip"><span>⚠️</span><p><strong>Shopping</strong> exceeded budget by ₹999. Set a weekly shopping limit of ₹750.</p></div>
+          <div class="ai-budget-tip"><span>✅</span><p>Your <strong>Savings rate (24%)</strong> exceeds the recommended 20%. Excellent discipline!</p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="dashboard.js"></script>
+<script>
+function updateIncome() {
+  const val = parseInt(document.getElementById('income-input').value) || 24500;
+  document.getElementById('income-display').textContent = '₹' + val.toLocaleString('en-IN');
+  showToast('Income Updated', 'Monthly income set to ₹' + val.toLocaleString('en-IN'), 'success');
+}
+document.querySelectorAll('.budget-cat-fill').forEach(bar => {
+  const w = bar.style.width; bar.style.width = '0';
+  setTimeout(() => { bar.style.width = w; }, 400);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gullakh – Transactions</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+<div class="amb amb-gold"></div><div class="amb amb-clay"></div><div class="grain"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo"><span class="logo-dot">🪙</span><span class="logo-text">Gullakh</span></div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span><span class="nav-label">Dashboard</span></a>
+    <a href="transactions.html" class="nav-item active"><span class="nav-icon">↕</span><span class="nav-label">Transactions</span></a>
+    <a href="analysis.html" class="nav-item"><span class="nav-icon">◈</span><span class="nav-label">Analysis</span></a>
+    <a href="goals.html" class="nav-item"><span class="nav-icon">◎</span><span class="nav-label">Goals</span></a>
+    <a href="insights.html" class="nav-item"><span class="nav-icon">✦</span><span class="nav-label">Insights</span></a>
+    <a href="ai-assistant.html" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">AI Assistant</span></a>
+    <a href="budget-planner.html" class="nav-item"><span class="nav-icon">▦</span><span class="nav-label">Budget Planner</span></a>
+    <a href="categories.html" class="nav-item"><span class="nav-icon">⊛</span><span class="nav-label">Expense Categories</span></a>
+    <a href="notifications.html" class="nav-item"><span class="nav-icon">◐</span><span class="nav-label">Notifications</span><span class="nav-badge">3</span></a>
+    <a href="settings.html" class="nav-item"><span class="nav-icon">⚙</span><span class="nav-label">Settings</span></a>
+  </nav>
+  <div class="sidebar-footer"><div class="user-mini"><div class="user-avatar-sm">A</div><div class="user-info-sm"><span class="user-name-sm">Arjun Sharma</span><span class="user-role-sm">Student</span></div></div></div>
+</aside>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="main-wrapper">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" id="hamburger">&#9776;</button>
+      <div class="topbar-greeting"><span class="greeting-text">Good Morning, <strong class="greeting-user-name>User</strong> 👋</span><span class="greeting-quote">Track Smart. Save Smarter.</span></div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-bar"><span class="search-icon">🔍</span><input type="text" id="txn-search" placeholder="Search transactions..."></div>
+      <a href="notifications.html" class="icon-btn notif-btn"><span>🔔</span><span class="notif-dot"></span></a>
+      <div class="user-avatar">A</div>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div><h2 class="page-title">Transactions</h2><span class="page-subtitle">All your income & expenses in one place</span></div>
+      <button class="btn-primary" onclick="openModal('add-txn-modal')">+ Add Transaction</button>
+    </div>
+
+    <!-- Summary -->
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+      <div class="stat-card card-balance animate-in"><div class="stat-icon">💚</div><div class="stat-body"><span class="stat-label">Total Income</span><span class="stat-value">₹24,500</span><span class="stat-change positive">This month</span></div><div class="stat-glow"></div></div>
+      <div class="stat-card card-spending animate-in" style="animation-delay:.1s"><div class="stat-icon">🔴</div><div class="stat-body"><span class="stat-label">Total Expenses</span><span class="stat-value">₹18,640</span><span class="stat-change negative">This month</span></div><div class="stat-glow"></div></div>
+      <div class="stat-card card-savings animate-in" style="animation-delay:.2s"><div class="stat-icon">💰</div><div class="stat-body"><span class="stat-label">Net Savings</span><span class="stat-value">₹5,860</span><span class="stat-change positive">+23.9%</span></div><div class="stat-glow"></div></div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar animate-in" style="animation-delay:.3s">
+      <input class="filter-input" type="text" id="search-input" placeholder="🔍 Search by name...">
+      <select class="filter-select" id="filter-cat">
+        <option value="">All Categories</option>
+        <option>Food</option><option>Shopping</option><option>Transport</option>
+        <option>Entertainment</option><option>Education</option><option>Income</option>
+      </select>
+      <select class="filter-select" id="filter-type">
+        <option value="">All Types</option>
+        <option value="credit">Income</option>
+        <option value="debit">Expense</option>
+      </select>
+      <select class="filter-select" id="filter-sort">
+        <option value="date">Sort: Latest</option>
+        <option value="amount-high">Amount: High to Low</option>
+        <option value="amount-low">Amount: Low to High</option>
+      </select>
+    </div>
+
+    <!-- Transaction List -->
+    <div class="card animate-in" style="animation-delay:.4s">
+      <div id="txn-container"></div>
+    </div>
+  </main>
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="openModal('add-txn-modal')">+</button>
+
+<!-- Add Transaction Modal -->
+<div class="modal-overlay" id="add-txn-modal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Add Transaction</span><button class="modal-close">✕</button></div>
+    <div class="form-group"><label>Transaction Name</label><input type="text" placeholder="e.g. Swiggy Order"></div>
+    <div class="form-group"><label>Amount (₹)</label><input type="number" placeholder="0.00"></div>
+    <div class="form-group"><label>Type</label><select><option>Expense</option><option>Income</option></select></div>
+    <div class="form-group"><label>Category</label><select><option>Food</option><option>Shopping</option><option>Transport</option><option>Entertainment</option><option>Education</option><option>Income</option></select></div>
+    <div class="form-group"><label>Date</label><input type="date"></div>
+    <div class="modal-actions"><button class="btn-ghost" onclick="closeModal('add-txn-modal')">Cancel</button><button class="btn-primary" onclick="closeModal('add-txn-modal');showToast('Transaction Added','Your transaction has been recorded.','success')">Save</button></div>
+  </div>
+</div>
+
+<script src="dashboard.js"></script>
+<script>
+const transactions = [
+  {id:1,name:'Swiggy',cat:'Food',icon:'🍔',color:'#ff6b35',date:'Dec 20, 2024',amount:-340,type:'debit'},
+  {id:2,name:'Freelance Payment',cat:'Income',icon:'💼',color:'#34d399',date:'Dec 20, 2024',amount:8000,type:'credit'},
+  {id:3,name:'Amazon',cat:'Shopping',icon:'📦',color:'#f4b942',date:'Dec 19, 2024',amount:-1299,type:'debit'},
+  {id:4,name:'Uber',cat:'Transport',icon:'🚗',color:'#00c893',date:'Dec 18, 2024',amount:-180,type:'debit'},
+  {id:5,name:'Netflix',cat:'Entertainment',icon:'🎬',color:'#e50a14',date:'Dec 17, 2024',amount:-649,type:'debit'},
+  {id:6,name:'Big Bazaar',cat:'Shopping',icon:'🛒',color:'#0071ce',date:'Dec 16, 2024',amount:-2140,type:'debit'},
+  {id:7,name:'Zomato',cat:'Food',icon:'🍕',color:'#e23744',date:'Dec 15, 2024',amount:-420,type:'debit'},
+  {id:8,name:'Scholarship',cat:'Income',icon:'🎓',color:'#34d399',date:'Dec 14, 2024',amount:5000,type:'credit'},
+  {id:9,name:'Ola',cat:'Transport',icon:'🛺',color:'#5cb85c',date:'Dec 13, 2024',amount:-95,type:'debit'},
+  {id:10,name:'Spotify',cat:'Entertainment',icon:'🎵',color:'#1db954',date:'Dec 12, 2024',amount:-119,type:'debit'},
+  {id:11,name:'BYJU\'S',cat:'Education',icon:'📚',color:'#7c3aed',date:'Dec 11, 2024',amount:-999,type:'debit'},
+  {id:12,name:'Dunzo',cat:'Shopping',icon:'🛍️',color:'#f59e0b',date:'Dec 10, 2024',amount:-560,type:'debit'},
+];
+
+function renderTxns(list) {
+  const c = document.getElementById('txn-container');
+  if (!list.length) { c.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p class="empty-title">No transactions found</p><p class="empty-sub">Try adjusting your filters or add a new transaction.</p></div>'; return; }
+  c.innerHTML = list.map(t => `
+    <div class="txn-item" style="border-bottom:1px solid var(--border);padding:14px 8px">
+      <div class="txn-icon" style="background:${t.color}20;font-size:1.2rem">${t.icon}</div>
+      <div class="txn-info"><span class="txn-name">${t.name}</span><span class="txn-date">${t.cat} · ${t.date}</span></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="badge-pill ${t.type==='credit'?'badge-green':'badge-red'}">${t.type==='credit'?'Income':'Expense'}</span>
+        <span class="txn-amount ${t.type==='credit'?'positive':'negative'}">${t.type==='credit'?'+':'-'}₹${Math.abs(t.amount).toLocaleString('en-IN')}</span>
+      </div>
+    </div>`).join('');
+}
+
+function applyFilters() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const cat = document.getElementById('filter-cat').value;
+  const type = document.getElementById('filter-type').value;
+  const sort = document.getElementById('filter-sort').value;
+  let list = transactions.filter(t =>
+    (!search || t.name.toLowerCase().includes(search)) &&
+    (!cat || t.cat === cat) &&
+    (!type || t.type === type)
+  );
+  if (sort === 'amount-high') list.sort((a,b) => Math.abs(b.amount)-Math.abs(a.amount));
+  else if (sort === 'amount-low') list.sort((a,b) => Math.abs(a.amount)-Math.abs(b.amount));
+  renderTxns(list);
+}
+
+['search-input','filter-cat','filter-type','filter-sort'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', applyFilters);
+  document.getElementById(id)?.addEventListener('change', applyFilters);
+});
+document.getElementById('txn-search')?.addEventListener('input', e => {
+  document.getElementById('search-input').value = e.target.value;
+  applyFilters();
+});
+renderTxns(transactions);
+</script>
+</body>
+</html>
+
+
