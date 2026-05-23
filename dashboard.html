@@ -7,7 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="dashboard.css?v=2">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <!-- Ambient glows -->
@@ -28,10 +29,10 @@
     <a href="goals.html" class="nav-item" data-label="Goals"><span class="nav-icon">◎</span><span class="nav-label">Goals</span></a>
     <a href="insights.html" class="nav-item" data-label="Insights"><span class="nav-icon">✦</span><span class="nav-label">Insights</span></a>
     <a href="ai-assistant.html" class="nav-item" data-label="AI Assistant"><span class="nav-icon">◉</span><span class="nav-label">AI Assistant</span></a>
-    <a href="budget-planner.html" class="nav-item" data-label="Budget Planner"><span class="nav-icon">▦</span><span class="nav-label">Budget Planner</span></a>
     <a href="categories.html" class="nav-item" data-label="Categories"><span class="nav-icon">⊛</span><span class="nav-label">Expense Categories</span></a>
     <a href="notifications.html" class="nav-item" data-label="Notifications"><span class="nav-icon">◐</span><span class="nav-label">Notifications</span><span class="nav-badge">3</span></a>
     <a href="settings.html" class="nav-item" data-label="Settings"><span class="nav-icon">⚙</span><span class="nav-label">Settings</span></a>
+    <a href="index.html" class="nav-item" style="color: #f87171; margin-top: auto;" onclick="localStorage.clear()"><span class="nav-icon">🚪</span><span class="nav-label">Logout</span></a>
   </nav>
   <div class="sidebar-footer">
     <div class="user-mini">
@@ -102,18 +103,20 @@
 
     <!-- Middle Row -->
     <div class="mid-grid">
-      <!-- AI Suggestions -->
-      <div class="card ai-card animate-in" style="animation-delay:.4s">
+      <!-- Expense Distribution Placeholder -->
+      <div class="card chart-card animate-in" style="animation-delay:.4s">
         <div class="card-header">
-          <span class="card-title">✦ AI Suggestions</span>
-          <span class="ai-badge">LIVE</span>
+          <span class="card-title">🥧 Expense Distribution</span>
+          <span class="chart-badge">ML Pending</span>
         </div>
-        <div class="ai-suggestions">
-          <div class="ai-tip"><span class="tip-icon">💡</span><p>You spent <strong>₹3,200</strong> on food delivery this week. Cook at home 3x to save ₹1,500.</p></div>
-          <div class="ai-tip"><span class="tip-icon">⚠️</span><p>Netflix + Hotstar + Spotify = <strong>₹1,097/mo</strong>. Consider consolidating subscriptions.</p></div>
-          <div class="ai-tip"><span class="tip-icon">🎯</span><p>You're <strong>78%</strong> toward your Laptop goal. ₹4,200 more needed.</p></div>
+        <div class="chart-placeholder">
+          <div class="chart-blur-bg"></div>
+          <div class="chart-empty-state">
+            <div class="chart-icon-anim">◈</div>
+            <p class="chart-empty-title">No Graph Available</p>
+            <p class="chart-empty-sub">ML Model Not Connected Yet</p>
+          </div>
         </div>
-        <a href="insights.html" class="card-link">View All Insights →</a>
       </div>
 
       <!-- Spending Overview Placeholder -->

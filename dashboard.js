@@ -3,7 +3,7 @@
    ============================================================ */
 
 // ── User name from localStorage ──────────────────────────────
-const storedName = localStorage.getItem('gullak_user_name') || 'User';
+const storedName = localStorage.getItem('gullak_user_name') || 'Gajanan Buchake';
 const storedFirst = localStorage.getItem('gullak_user_first') || storedName.split(' ')[0];
 const avatarLetter = storedFirst.charAt(0).toUpperCase();
 
@@ -94,3 +94,40 @@ document.querySelectorAll('.goal-fill').forEach(bar => {
   bar.style.width = '0';
   setTimeout(() => { bar.style.width = w; }, 300);
 });
+
+// Initialize Pie Chart if canvas exists
+const pieCanvas = document.getElementById('expensePieChart');
+if (pieCanvas) {
+  const ctx = pieCanvas.getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Food & Dining', 'Shopping', 'Transport', 'Entertainment', 'Groceries'],
+      datasets: [{
+        data: [3200, 1299, 180, 649, 2140],
+        backgroundColor: [
+          '#4318FF',
+          '#39B8FF',
+          '#FFB547',
+          '#F87171',
+          '#34D399'
+        ],
+        borderWidth: 0,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            color: '#2B3674',
+            font: { family: 'Outfit' }
+          }
+        }
+      }
+    }
+  });
+}

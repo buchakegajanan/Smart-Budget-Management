@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gullakh – Settings</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="dashboard.css?v=2">
 <style>
 .settings-layout{display:grid;grid-template-columns:220px 1fr;gap:20px}
 .settings-nav{display:flex;flex-direction:column;gap:4px}
@@ -59,10 +59,10 @@
     <a href="goals.html" class="nav-item"><span class="nav-icon">◎</span><span class="nav-label">Goals</span></a>
     <a href="insights.html" class="nav-item"><span class="nav-icon">✦</span><span class="nav-label">Insights</span></a>
     <a href="ai-assistant.html" class="nav-item"><span class="nav-icon">◉</span><span class="nav-label">AI Assistant</span></a>
-    <a href="budget-planner.html" class="nav-item"><span class="nav-icon">▦</span><span class="nav-label">Budget Planner</span></a>
     <a href="categories.html" class="nav-item"><span class="nav-icon">⊛</span><span class="nav-label">Expense Categories</span></a>
     <a href="notifications.html" class="nav-item"><span class="nav-icon">◐</span><span class="nav-label">Notifications</span><span class="nav-badge">3</span></a>
     <a href="settings.html" class="nav-item active"><span class="nav-icon">⚙</span><span class="nav-label">Settings</span></a>
+    <a href="index.html" class="nav-item" style="color: #f87171; margin-top: auto;" onclick="localStorage.clear()"><span class="nav-icon">🚪</span><span class="nav-label">Logout</span></a>
   </nav>
   <div class="sidebar-footer"><div class="user-mini"><div class="user-avatar-sm">A</div><div class="user-info-sm"><span class="user-name-sm">Arjun Sharma</span><span class="user-role-sm">Student</span></div></div></div>
 </aside>
@@ -92,25 +92,25 @@
         <div class="settings-section active" id="section-profile">
           <div class="profile-card">
             <div class="profile-avatar-wrap">
-              <div class="profile-avatar-lg">A</div>
+              <div class="profile-avatar-lg" id="settingsAvatarLg">A</div>
               <div class="avatar-upload-btn" onclick="showToast('Upload','Avatar upload coming soon','info')">📷</div>
             </div>
             <div class="profile-info">
-              <h3>Arjun Sharma</h3>
-              <p>arjun.sharma@email.com · Student</p>
-              <button class="btn-outline" onclick="showToast('Saved','Profile updated successfully','success')">Edit Profile</button>
+              <h3 id="displayFullName">User Name</h3>
+              <p id="displayEmailOcc">user@email.com · Student</p>
+              <button class="btn-outline" onclick="document.getElementById('inputFullName').focus()">Edit Profile</button>
             </div>
           </div>
           <div class="settings-card">
             <h3>Personal Information</h3>
-            <div class="form-group"><label>Full Name</label><input type="text" value="Arjun Sharma"></div>
-            <div class="form-group"><label>Email Address</label><input type="email" value="arjun.sharma@email.com"></div>
-            <div class="form-group"><label>Phone Number</label><input type="tel" value="+91 98765 43210"></div>
-            <div class="form-group"><label>Occupation</label><select><option selected>Student</option><option>Working Professional</option><option>Freelancer</option><option>Business Owner</option></select></div>
-            <div class="form-group"><label>Monthly Income (₹)</label><input type="number" value="24500"></div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="inputFullName" value=""></div>
+            <div class="form-group"><label>Email Address</label><input type="email" id="inputEmail" value=""></div>
+            <div class="form-group"><label>Phone Number</label><input type="tel" id="inputPhone" value=""></div>
+            <div class="form-group"><label>Occupation</label><select id="inputOccupation"><option value="Student">Student</option><option value="Working Professional">Working Professional</option><option value="Freelancer">Freelancer</option><option value="Business Owner">Business Owner</option></select></div>
+            <div class="form-group"><label>Monthly Income (₹)</label><input type="number" id="inputIncome" value=""></div>
             <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-              <button class="btn-ghost">Cancel</button>
-              <button class="btn-primary" onclick="showToast('Saved','Profile updated successfully','success')">Save Changes</button>
+              <button class="btn-ghost" onclick="loadProfileData()">Cancel</button>
+              <button class="btn-primary" onclick="saveProfileData()">Save Changes</button>
             </div>
           </div>
         </div>
@@ -236,6 +236,57 @@ function selectTheme(el, name) {
   el.querySelector('.theme-name').textContent = name + ' ✓';
   showToast('Theme Applied', name + ' theme selected', 'success');
 }
+
+// Profile Data Management
+function loadProfileData() {
+  const name = localStorage.getItem('gullak_user_name') || 'Gajanan Buchake';
+  const email = localStorage.getItem('gullak_user_email') || 'arjun.sharma@email.com';
+  const phone = localStorage.getItem('gullak_user_phone') || '+91 98765 43210';
+  const occ = localStorage.getItem('gullak_user_occupation') || 'Student';
+  const inc = localStorage.getItem('gullak_user_income') || '24500';
+
+  document.getElementById('inputFullName').value = name;
+  document.getElementById('inputEmail').value = email;
+  document.getElementById('inputPhone').value = phone;
+  document.getElementById('inputOccupation').value = occ;
+  document.getElementById('inputIncome').value = inc;
+
+  document.getElementById('displayFullName').textContent = name;
+  document.getElementById('displayEmailOcc').textContent = email + ' · ' + occ;
+  document.getElementById('settingsAvatarLg').textContent = name.charAt(0).toUpperCase();
+  
+  // Also update sidebar avatar
+  document.querySelectorAll('.user-avatar, .user-avatar-sm').forEach(el => {
+    el.textContent = name.charAt(0).toUpperCase();
+  });
+  document.querySelectorAll('.user-name-sm').forEach(el => el.textContent = name);
+  document.querySelectorAll('.user-role-sm').forEach(el => el.textContent = occ);
+}
+
+function saveProfileData() {
+  const name = document.getElementById('inputFullName').value;
+  const email = document.getElementById('inputEmail').value;
+  const phone = document.getElementById('inputPhone').value;
+  const occ = document.getElementById('inputOccupation').value;
+  const inc = document.getElementById('inputIncome').value;
+
+  localStorage.setItem('gullak_user_name', name);
+  localStorage.setItem('gullak_user_first', name.split(' ')[0]);
+  localStorage.setItem('gullak_user_email', email);
+  localStorage.setItem('gullak_user_phone', phone);
+  localStorage.setItem('gullak_user_occupation', occ);
+  localStorage.setItem('gullak_user_income', inc);
+
+  loadProfileData();
+  
+  // Update dashboard.js greeting if we can
+  const first = name.split(' ')[0];
+  document.querySelectorAll('.greeting-user-name').forEach(el => el.textContent = first);
+
+  showToast('Saved', 'Profile updated successfully', 'success');
+}
+
+document.addEventListener('DOMContentLoaded', loadProfileData);
 </script>
 </body>
 </html>
